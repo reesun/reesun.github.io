@@ -3,7 +3,7 @@ layout: post
 title: Welcome
 ---
 
-## About Me
+## 关于我
 
 大学时写过小内核，些零散的记录。
 曾做过数据分析与推荐系统的相关工作，
