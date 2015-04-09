@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 读《当下的力量》
-category: 读书笔记
+category: 读书
 tags: 当下的力量
 keywords: 当下的力量, The Power of Now, 埃克哈特·托利
 description: 
