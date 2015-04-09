@@ -1,0 +1,32 @@
+permalink: /:year/:month/:day/:title.html
+markdown: kramdown
+pygments: true
+
+kramdown:
+  input: GFM
+
+# 作者信息
+author: 
+  name: 黄曦然
+  email: huang@come2art.com
+  link: http://blog.come2art.com
+  github: http://github.com/reesun
+
+# 站点信息
+title: 梦开始的地方
+description: 梦开始的地方
+url: http://blog.come2art.com
+rss_url: /pages/atom.xml
+
+# avatar头像及Favicon
+avatar: https://avatars2.githubusercontent.com/u/1166678
+favicon: https://avatars2.githubusercontent.com/u/1166678
+
+# google analytics 设置
+# ga:
+#   id: 
+#   url: 
+
+# disqus 设置
+disqus:
+  shortname: reesun-zh
