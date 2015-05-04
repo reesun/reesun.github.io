@@ -9,7 +9,7 @@ description:
 
 最近逐步的从 Maven 切换到 Gradle 上。抽时间补点文章吧。
 
-### Greadle简介
+### Gradle简介
 
 Gradle 是一款基于[Groovy](http://groovy-lang.org/)语言、免费开源的构建工具，它既保持了 [Maven](http://maven.apache.org/) 的优点，又通过使用 Groovy 定义的 DSL 克服了 Maven 中使用 XML 繁冗以及不灵活的缺点。
 
