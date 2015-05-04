@@ -16,7 +16,8 @@ Gradle 是一款基于[Groovy](http://groovy-lang.org/)语言、免费开源的�
 Gradle 官方网站：<http://gradle.org/>
 
 ### 安装
-##### 安装说明：
+
+#### 安装说明：
 - 官方文档：
 从[官网](http://gradle.org/downloads)直接下载编译好的版本，配置相应的路径即可。
 - Mac brew 安装：命令如下
@@ -25,7 +26,7 @@ Gradle 官方网站：<http://gradle.org/>
 - Linux (待续)
 - Windows (待续)
 
-##### 检测是否安装成功
+#### 检测是否安装成功
 -执行如下命令，查看当先gradle版本信息
 
 
