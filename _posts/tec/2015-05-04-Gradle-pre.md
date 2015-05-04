@@ -9,14 +9,14 @@ description:
 
 最近逐步的从 Maven 切换到 Gradle 上。抽时间补点文章吧。
 
-###Greadle简介
+### Greadle简介
 
 Gradle 是一款基于[Groovy](http://groovy-lang.org/)语言、免费开源的构建工具，它既保持了 [Maven](http://maven.apache.org/) 的优点，又通过使用 Groovy 定义的 DSL 克服了 Maven 中使用 XML 繁冗以及不灵活的缺点。
 
 Gradle 官方网站：<http://gradle.org/>
 
-###安装
-#####安装说明：
+### 安装
+##### 安装说明：
 - 官方文档：
 从[官网](http://gradle.org/downloads)直接下载编译好的版本，配置相应的路径即可。
 - Mac brew 安装：命令如下
@@ -25,7 +25,7 @@ Gradle 官方网站：<http://gradle.org/>
 - Linux (待续)
 - Windows (待续)
 
-#####检测是否安装成功
+##### 检测是否安装成功
 -执行如下命令，查看当先gradle版本信息
 
 
@@ -46,7 +46,7 @@ Gradle 官方网站：<http://gradle.org/>
 	JVM:          1.8.0_40 (Oracle Corporation 25.40-b25)
 	OS:           Mac OS X 10.10.2 x86_64
 
-###简单使用
+### 简单使用
 
 Gradle 使用 约定[优于配置](http://zh.wikipedia.org/wiki/%E7%BA%A6%E5%AE%9A%E4%BC%98%E4%BA%8E%E9%85%8D%E7%BD%AE)(Convention over Configuration)的理念。使用与maven兼容的目录结构布局。完全按照约定的目录结构来布置工程文件，会大大简化编译配置文件。
 
@@ -58,7 +58,7 @@ Gradle 已经自带了很多 pugins，可以满足大部分的常见构建任务
 
 Gradle 的默认构建脚本文件为工程根目录下的 build.gradle。
 
-###创建项目
+### 创建项目
 
 作为测试，创建一个 test 目录，然后通过下面命令来初始化一个项目：
 
@@ -150,9 +150,9 @@ gradle 便会自动地到 junit 服务器下载 junit.*.jar，以及它所依赖
 	}  
 
 
-###其他使用
+### 其他使用
 
-#####创建项目目录结构
+##### 创建项目目录结构
 gradle 不像 maven 那样有固定的项目结构，gradle 原生 API 是不支持的，要想做到这一点，我们可以自定义一个 task。
 
 	apply plugin: 'idea'
@@ -211,7 +211,7 @@ gradle 不像 maven 那样有固定的项目结构，gradle 原生 API 是不支
 
 
 
-###针对JAVA，从Maven迁到Gradle
+##### 针对JAVA，从Maven迁到Gradle
 
 如何将一个 java 项目从maven迁移到 gradle 呢？gradle 集成了一个很方便的插件：Build Init Plugin，使用这个插件可以很方便地创建一个新的 gradle 项目，或者将其它类型的项目转换为 gradle 项目。
 
