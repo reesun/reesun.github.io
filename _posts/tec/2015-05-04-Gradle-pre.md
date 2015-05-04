@@ -35,17 +35,17 @@ Gradle 官方网站：<http://gradle.org/>
 - 如果安装成功，将有如下信息
 	
 		------------------------------
-	Gradle 2.3
-	------------------------------
+		Gradle 2.3
+		------------------------------
 
-	Build time:   2015-02-16 05:09:33 UTC
-	Build number: none
-	Revision:     586be72bf6e3df1ee7676d1f2a3afd9157341274
+		Build time:   2015-02-16 05:09:33 UTC
+		Build number: none
+		Revision:     586be72bf6e3df1ee7676d1f2a3afd9157341274
 
-	Groovy:       2.3.9
-	Ant:          Apache Ant(TM) version 1.9.3 compiled on December 23 2013
-	JVM:          1.8.0_40 (Oracle Corporation 25.40-b25)
-	OS:           Mac OS X 10.10.2 x86_64
+		Groovy:       2.3.9
+		Ant:          Apache Ant(TM) version 1.9.3 compiled on December 23 2013
+		JVM:          1.8.0_40 (Oracle Corporation 25.40-b25)
+		OS:           Mac OS X 10.10.2 x86_64
 
 ### 简单使用
 
