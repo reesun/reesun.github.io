@@ -41,7 +41,7 @@ description:
 
 - 指定在多长时间内，有多少次更新操作，就将数据同步到数据文件，可以多个条件配合
 
-		`save <seconds> <changes>`
+		save <seconds> <changes>
 
   Redis默认配置文件中提供了三个条件：
 
@@ -136,14 +136,13 @@ description:
 
 - 指定在超过一定的数量或者最大的元素超过某一临界值时，采用一种特殊的哈希算法
 
-    		hash-max-zipmap-entries 64
-
-    		hash-max-zipmap-value 512
+		hash-max-zipmap-entries 64
+		hash-max-zipmap-value 512
 
 - 指定是否激活重置哈希，默认为开启（后面在介绍Redis的哈希算法时具体介绍）
 
-    		activerehashing yes
+		activerehashing yes
 
 - 指定包含其它的配置文件，可以在同一主机上多个Redis实例之间使用同一份配置文件，而同时各个实例又拥有自己的特定配置文件
 
-    		include /path/to/local.conf
+		include /path/to/local.conf
