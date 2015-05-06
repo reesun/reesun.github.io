@@ -1,9 +1,9 @@
 ---
 layout: post
-title: Gradle基本使用
+title: Redis配置说明
 category: 技术
-tags: gradle 项目构建
-keywords: gradle 项目构建 maven
+tags: redis redis配置
+keywords: redis redis配置
 description: 
 ---
 
