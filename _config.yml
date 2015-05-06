@@ -23,9 +23,9 @@ avatar: https://avatars2.githubusercontent.com/u/1166678
 favicon: https://avatars2.githubusercontent.com/u/1166678
 
 # google analytics 设置
-# ga:
-#   id: 
-#   url: 
+ga:
+  id: UA-20652740-2
+  url: blog.come2art.com
 
 # disqus 设置
 disqus:
