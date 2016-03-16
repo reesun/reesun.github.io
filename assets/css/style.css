@@ -111,12 +111,12 @@ a {
   background-size: 100px 100px;
   overflow: hidden;
   display: block; }
-  #avatar:hover {
+  /*#avatar:hover {
     -webkit-animation: spin .35s linear infinite;
     -moz-animation: spin .35s linear infinite;
     -ms-animation: spin .35s linear infinite;
     -o-animation: spin .35s linear infinite;
-    animation: spin .35s linear infinite; }
+    animation: spin .35s linear infinite; }*/
   @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
     #avatar {
       -webkit-background-size: 100px 100px;
