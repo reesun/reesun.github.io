@@ -8,5 +8,5 @@ keywords:
 description: 
 ---
 
-> author：reesun, email: <reesun.huang@gmail.com>
+> reesun
 想得太多，做得太少
