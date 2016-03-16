@@ -1,6 +1,6 @@
 ---
 layout: post
-title: linux查看进程信息 /proc/<pid>/status 
+title: linux查看进程信息 /proc/\<pid\>/status 
 category: 技术
 tags: linux进程 linux进程内存 linux进程信息
 keywords: linux process status
