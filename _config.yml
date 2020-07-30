@@ -9,13 +9,13 @@ kramdown:
 author: 
   name: 黄曦然
   email: huang@come2art.com
-  link: http://blog.come2art.com
+  link: http://reesun.github.com
   github: http://github.com/reesun
 
 # 站点信息
 title: 梦开始的地方
 description: 梦开始的地方
-url: http://blog.come2art.com
+url: http://reesun.github.com
 rss_url: /pages/atom.xml
 
 # avatar头像及Favicon
