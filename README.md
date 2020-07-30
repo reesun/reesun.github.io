@@ -1,6 +1,6 @@
 ### 我的博客
 
-地址：[http://blog.come2art.com](http://blog.come2art.com)
+地址：[http://reesun.github.io](http://reesun.github.io)
 
 ### 安装说明
 
