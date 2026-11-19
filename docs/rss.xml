@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+<channel>
+<title>梦开始的地方</title>
+<link>https://www.reesun.xyz/</link>
+<description>黄曦然的笔记</description>
+<item>
+<title>积极行动，解决问题</title>
+<link>https://www.reesun.xyz/writing/2016-03-16-act.html</link>
+<pubDate>2016-03-16</pubDate>
+<description>努力解决问题。</description>
+</item>
+<item>
+<title>Storm Tutorial 中文版</title>
+<link>https://www.reesun.xyz/writing/2015-06-13-storm.html</link>
+<pubDate>2015-06-13</pubDate>
+<description>Storm 官方教程的简体中文译本，从建表、查询到引用关系。</description>
+</item>
+<item>
+<title>linux查看进程信息 /proc/:pid/status</title>
+<link>https://www.reesun.xyz/writing/2015-05-13-proc-status.html</link>
+<pubDate>2015-05-13</pubDate>
+<description>用 /proc/&lt;pid&gt;/status 看进程状态、内存和信号。</description>
+</item>
+<item>
+<title>Redis配置说明</title>
+<link>https://www.reesun.xyz/writing/2015-05-06-redis.html</link>
+<pubDate>2015-05-06</pubDate>
+<description>Redis 配置项说明：守护进程、持久化、主从和连接限制。</description>
+</item>
+<item>
+<title>Gradle基本使用</title>
+<link>https://www.reesun.xyz/writing/2015-05-04-gradle.html</link>
+<pubDate>2015-05-04</pubDate>
+<description>从 Maven 换到 Gradle 时补的一份使用笔记。</description>
+</item>
+<item>
+<title>读《当下的力量》</title>
+<link>https://www.reesun.xyz/writing/2015-04-09-power-of-now.html</link>
+<pubDate>2015-04-09</pubDate>
+<description>胡思乱想的时候，当前这一分钟就被放掉了。</description>
+</item>
+<item>
+<title>男人，应该学会孤独</title>
+<link>https://www.reesun.xyz/writing/2015-04-09-solitude.html</link>
+<pubDate>2015-04-09</pubDate>
+<description>孤独是一种方式，也是一种境界。</description>
+</item>
+</channel>
+</rss>

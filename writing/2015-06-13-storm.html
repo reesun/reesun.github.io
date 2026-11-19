@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Storm Tutorial 中文版 · 梦开始的地方</title>
+  <meta name="description" content="Storm 官方教程的简体中文译本，从建表、查询到引用关系。">
+  <link rel="canonical" href="https://www.reesun.xyz/writing/2015-06-13-storm.html">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="alternate" type="application/rss+xml" title="梦开始的地方" href="/rss.xml">
+  <meta property="og:title" content="Storm Tutorial 中文版 · 梦开始的地方">
+  <meta property="og:description" content="Storm 官方教程的简体中文译本，从建表、查询到引用关系。">
+  <meta property="og:url" content="https://www.reesun.xyz/writing/2015-06-13-storm.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="梦开始的地方">
+  <meta name="theme-color" content="#f3efe6">
+  <link rel="stylesheet" href="/css/site.css">
+</head>
+<body>
+  <div class="frame">
+    <aside class="spine">
+      <a href="/">黄曦然</a>
+      <span>北京</span>
+    </aside>
+    <div class="sheet">
+      <nav class="nav">
+        <a href="/">首页</a>
+        <a href="/writing/" aria-current="page">写作</a>
+        <a href="https://github.com/reesun">GitHub</a>
+      </nav>
+      <main>
+        <article>
+          <p class="kicker"><a href="/writing/">写作</a> · 技术 · <time datetime="2015-06-13">2015.06.13</time></p>
+          <h1>Storm Tutorial 中文版</h1>
+          <div class="prose">
+<p><a href="https://storm.canonical.com">Storm</a> 是一个 Python ORM 库，本文是 <a href="https://storm.canonical.com/Tutorial">Storm 官方教程</a> 的简体中文翻译版。</p>
+<p>项目 Github 库： <a href="https://github.com/huangz1990/storm_orm_tutorial_cn">https://github.com/huangz1990/storm_orm_tutorial_cn</a> 。</p>
+<h2>跑起来再说！</h2>
+<p>这份 Storm 教程包含在源代码 <code>tests/tutorial.txt</code> 当中，因此它会被测试并保持更新。</p>
+<p>Ubuntu 的 Storm 包由 Storm 团队提供：</p>
+<pre><code>sudo apt-add-repository ppa:storm/ppa
+sudo apt-get update
+sudo apt-get install python-storm</code></pre>
+<h2>载入</h2>
+<p>让我们从往命名空间(namespace)载入一些名字(names)开始。</p>
+<pre><code>&gt;&gt;&gt; from storm.locals import *
+&gt;&gt;&gt;</code></pre>
+<h2>基本定义</h2>
+<p>现在，我们定义一种用几项属性来描述信息的类型(type)，用它来作映射。</p>
+<pre><code>&gt;&gt;&gt; class Person(object):
+...     __storm_table__ = &quot;person&quot;
+...     id = Int(primary=True)
+...     name = Unicode()</code></pre>
+<p>注意，这个定义没有使用任何 Storm 定义的 <code>base</code> 类或构造函数。</p>
+<h2>创建一个数据库以及仓库(store)</h2>
+<p>我们还是什么都没讲到，因此，让我们来定义一个储存在内存中的 SQLite 数据库，以及使用该数据库的仓库来玩玩。</p>
+<pre><code>&gt;&gt;&gt; database = create_database(&quot;sqlite:&quot;)
+&gt;&gt;&gt; store = Store(database)
+&gt;&gt;&gt;</code></pre>
+<p>目前，有三种数据库被支持： SQLite ， MySQL 以及 PostgreSQL 。 <code>create_database</code> 函数接受 URI 作为参数，就像这样：</p>
+<pre><code>database = create_database(&quot;scheme://username:password@hostname:port/database_name&quot;)</code></pre>
+<p>其中的 <code>scheme</code> 可以是 <code>sqlite</code> ， <code>postgres</code> ，或 <code>mysql</code> 。</p>
+<p>现在我们要创建一个表，将该表用来保存我们类中的数据。</p>
+<pre><code>&gt;&gt;&gt; store.execute(&quot;CREATE TABLE person &quot;
+...               &quot;(id INTEGER PRIMARY KEY, name VARCHAR)&quot;)
+&lt;storm.databases.sqlite.SQLiteResult object at 0x...&gt;&gt; </code></pre>
+<p>我们得到了一个结果(result)，不过现在不必关心它。通过使用 <code>noresult=True</code> ，我们也可以省略所有结果。</p>
+<h2>创建对象</h2>
+<p>让我们通过前面定义的类来创建对象。</p>
+<pre><code>&gt;&gt;&gt; joe = Person()
+&gt;&gt;&gt; joe.name = u&quot;Joe Johnes&quot;
+&gt;&gt;&gt;
+&gt;&gt;&gt; print &quot;%r, %r&quot; % (joe.id, joe.name)
+5 None, u&#x27;Joe Johnes&#x27;</code></pre>
+<p>到目前为止，这个对象都还没有连接到数据库。现在，让我们将它加入到前面创建的仓库当中。</p>
+<pre><code>&gt;&gt;&gt; store.add(joe)
+&lt;Person object at 0x...&gt;
+
+&gt;&gt;&gt; print &quot;%r, %r&quot; % (joe.id, joe.name)
+None, u&#x27;Joe Johnes&#x27;</code></pre>
+<p>请注意，这个对象并没有任何改变，即便是被加入到仓库之后 —— 这是因为它还没有刷新呢。</p>
+<h2>对象的仓库</h2>
+<p>一旦对象被加入到仓库，或从仓库中被检索，它和仓库的关系就明了了。我们也可以很容易地验证对象绑定到了哪一个仓库。</p>
+<pre><code>&gt;&gt;&gt; Store.of(joe) is store
+True
+
+&gt;&gt;&gt; Store.of(Person()) is None
+True</code></pre>
+<h2>对象的查找</h2>
+<p>现在，如果我们向仓库查询名为 Joe Johnes 的人，会发生什么事？</p>
+<pre><code>&gt;&gt;&gt; person = store.find(Person, Person.name == u&quot;Joe Johnes&quot;).one()
+
+&gt;&gt;&gt; print &quot;%r, %r&quot; % (person.id, person.name)
+1, u&#x27;Joe Johnes&#x27;</code></pre>
+<p>Joe Johnes 已经被仓库记录了！是的，就正如你所期待的一样。</p>
+<p>我们还可以通过主键(primary key)来检索对象。</p>
+<pre><code>&gt;&gt;&gt; store.get(Person, 1).name
+u&#x27;Joe Johnes</code></pre>
+<h2>缓存特性</h2>
+<p>有趣的是， <code>person</code> 变量实际上就是 <code>joe</code> ，是吧？我们才刚刚添加了一个对象，所以应该只有一个 Joe ，为什么会有两个不同的对象呢？答案是，这两个变量指向的是同一个 Joe ：</p>
+<pre><code>&gt;&gt;&gt; person is joe
+True</code></pre>
+<p>事实上，每个仓库都一个对象缓存(cache)。当一个对象加入到仓库之后，在它被其他地方引用(reference)期间，仓库会尽可能地缓存它，直到该对象被污染(dirty，即有更改未被刷新)。</p>
+<p>Storm 保证至少有一定数目的最近使用对象被保存到内存中用以取代查询，因此频繁使用的对象就不必事无大小都检索数据库了。</p>
+<h2>刷新</h2>
+<p>当第一次试图在数据库中查找 Joe 的时候，我们神奇地发现属性 <code>id</code> 已经被赋值了。这是因为对象已经被隐含地(implicitly)刷新了，也就是说，某些行为也会导致之前的改动操作(changes)生效。</p>
+<p>刷新也可以强制地(explicitly)发生：</p>
+<pre><code>&gt;&gt;&gt; mary = Person()
+&gt;&gt;&gt; mary.name = u&quot;Mary Margaret&quot;
+&gt;&gt;&gt; store.add(mary)
+&lt;Person object at 0x...&gt;
+&gt;&gt;&gt;
+&gt;&gt;&gt; print &quot;%r, %r&quot; % (mary.id, mary.name)
+None, u&#x27;Mary Margaret&#x27;
+&gt;&gt;&gt;
+&gt;&gt;&gt; store.flush()
+&gt;&gt;&gt; print &quot;%r, %r&quot; % (mary.id, mary.name)
+2, u&#x27;Mary Margaret&#x27;</code></pre>
+<h2>改变仓库中的对象</h2>
+<p>正如往常修改对象一样，我们也可以通过使用表达式修改绑定了数据库的对象，并因此收益。</p>
+<pre><code>&gt;&gt;&gt; store.find(Person, Person.name == u&quot;Mary Margaret&quot;).set(name=u&quot;Mary Maggie&quot;)
+&gt;&gt;&gt; mary.name
+u&#x27;Mary Maggie&#x27;</code></pre>
+<p>此操作会修改数据库及内存中所有匹配对象。</p>
+<h2>提交</h2>
+<p>至今为止我们所做的一切都只是事务(transaction)。在这个点上，我们既可以通过提交(committing)操作，将之前未提交的改动操作都执行，又或者，我们可以通过回滚(rolling)操作来取消它们。</p>
+<p>让我们来提交它，这很简单：</p>
+<pre><code>&gt;&gt;&gt; store.commit()
+&gt;&gt;&gt;</code></pre>
+<p>一目了然。一切还是像以前一样，但现在改动操作已经是板上钉钉了。</p>
+<h2>回滚</h2>
+<p>想要终止改动操作也是同样直观的。</p>
+<pre><code>&gt;&gt;&gt; joe.name = u&quot;Tom Thomas&quot;
+&gt;&gt;&gt;</code></pre>
+<p>让我们在 Storm 的数据库中看看这种改动将会是什么样子。</p>
+<pre><code>&gt;&gt;&gt; person = store.find(Person, Person.name == u&quot;Tom Thomas&quot;).one()
+&gt;&gt;&gt; person is joe
+True</code></pre>
+<p>一切如常，现在，魔术开始(音乐，起！）。</p>
+<pre><code>&gt;&gt;&gt; store.rollback()
+&gt;&gt;&gt;</code></pre>
+<p>呃。。。啥事都没发生？</p>
+<p>其实不然。 Joe ，他回来了！</p>
+<pre><code>&gt;&gt;&gt; print &quot;%r, %r&quot; % (joe.id, joe.name)
+1, u&#x27;Joe Johnes&#x27;</code></pre>
+<h2>构造函数</h2>
+<p>我们研究人(<code>Person</code> 类)已经够久了。现在，让我们在模型中增加一种新数据：公司(<code>Company</code> 类)。我们将在 <code>Company</code> 类中使用构造函数，因为这会比较好玩。这将是你所见过的最简单的公司类：</p>
+<pre><code>&gt;&gt;&gt; class Company(object):
+...     __storm_table__ = &quot;company&quot;
+...     id = Int(primary=True)
+...     name = Unicode()
+...
+...     def __init__(self, name):
+...         self.name = name</code></pre>
+<p>注意，构造函数的参数并非是可选的。如果你愿意，它也可以是可选的，但公司总得有个名字吧。</p>
+<p>让我们为它添加表：</p>
+<pre><code>&gt;&gt;&gt; store.execute(&quot;CREATE TABLE company &quot;
+...               &quot;(id INTEGER PRIMARY KEY, name VARCHAR)&quot;, noresult=True)</code></pre>
+<p>然后，创建一个新公司：</p>
+<pre><code>&gt;&gt;&gt; circus = Company(u&quot;Circus Inc.&quot;)
+
+&gt;&gt;&gt; print &quot;%r, %r&quot; % (circus.id, circus.name)
+None, u&#x27;Circus Inc.&#x27;</code></pre>
+<p>因为我们还没刷新，所以 <code>id</code> 仍然是未定义的。事实上，我们甚至还没有把新创建的公司加入到仓库中。我们稍候再来做这事。</p>
+<h2>引用和继承</h2>
+<p>现在，我们希望指派一些雇员到我们的公司。与其重定义 <code>Person</code> 类，我们不如让其维持原状，因为它足够一般，我们创建一个它的子类作为雇员类，其中雇员类还有一个新加入的字段：公司的 <code>id</code> 。</p>
+<pre><code>&gt;&gt;&gt; class Employee(Person):
+...     __storm_table__ = &quot;employee&quot;
+...     company_id = Int()
+...     company = Reference(company_id, Company.id)
+...
+...     def __init__(self, name):
+...         self.name = name</code></pre>
+<p>注意上面的定义，它没有改写 <code>Person</code> 类原有的东西，而是引入了引用到其他类的两个属性： <code>company_id</code> 和 <code>company</code> 。它也有构造函数，但里面并没有任何关于 <code>company</code> 的定义。</p>
+<p>像往常一样，我们需要一个表。 SQLite 对外键(foreign key)没有太多想法， 所以我们也懒得去定义它。</p>
+<pre><code>&gt;&gt;&gt; store.execute(&quot;CREATE TABLE employee &quot;
+...               &quot;(id INTEGER PRIMARY KEY, name VARCHAR, company_id INTEGER)&quot;,
+...               noresult=True)</code></pre>
+<p>是时候让 Ben 闪亮登场了：</p>
+<pre><code>&gt;&gt;&gt; ben = store.add(Employee(u&quot;Ben Bill&quot;))
+&gt;&gt;&gt;
+&gt;&gt;&gt; print &quot;%r, %r, %r&quot; % (ben.id, ben.name, ben.company_id)
+None, u&#x27;Ben Bill&#x27;, None</code></pre>
+<p>我们可以看到，以上内容还没有被刷新。即便如此，我们也可以断言 Bill 在马戏团(Circus)工作。</p>
+<pre><code>&gt;&gt;&gt; ben.company = circus
+&gt;&gt;&gt;
+&gt;&gt;&gt; print &quot;%r, %r&quot; % (ben.company_id, ben.company.name)
+None, u&#x27;Circus Inc.&#x27;</code></pre>
+<p>当然，在数据库刷新之前，我们仍然不知道公司 <code>id</code> ，也不显式地给他指定一个。即便如此， Storm 还是能保持它们之间的关系。</p>
+<p>如果有任何正在等待的操作被刷新到数据库中(无论是隐式或强制)，对象会获取它们的 <code>id</code> ，并保证在刷新之前，所有引用关系        都可以顺利被更新。</p>
+<pre><code>&gt;&gt;&gt; store.flush()
+&gt;&gt;&gt;
+&gt;&gt;&gt; print &quot;%r, %r&quot; % (ben.company_id, ben.company.name)
+1, u&#x27;Circus Inc.&#x27;</code></pre>
+<p>它们都被刷新到数据库里面了。现在，请注意马戏团公司并没有强制地被加入到仓库。Storm 会自动为引用和被引用对象双方完成该任务。</p>
+<p>让我们创建另一家公司来检查一下。这一次，我们会在加入新公司之后立刻刷新：</p>
+<pre><code>&gt;&gt;&gt; sweets = store.add(Company(u&quot;Sweets Inc.&quot;))
+&gt;&gt;&gt; store.flush()
+&gt;&gt;&gt; sweets.id
+2</code></pre>
+<p>不错，我们已经得到了新公司的 <code>id</code> 。那么，如果我们改变 Ben 的 <code>company_id</code> ，会怎么样？</p>
+<pre><code>&gt;&gt;&gt; ben.company_id = 2
+&gt;&gt;&gt; ben.company.name
+u&#x27;Sweets Inc.&#x27;
+&gt;&gt;&gt; ben.company is sweets
+True</code></pre>
+<p>哈哈！没有料到吧？</p>
+<p>让我们将所有改动都提交了吧。</p>
+<pre><code>&gt;&gt;&gt; store.commit()
+&gt;&gt;&gt;</code></pre>
+<h2>多对一引用集合</h2>
+<p>我们的模型表示，员工们只在一间公司工作(我们这里只设计平常人)，而公司当然可以有多个员工。在 Storm 中我们用引用集合(reference sets)表示它们。</p>
+<p>我们不重新定义 <code>Company</code> 类，而是将一个新特性(attribute)加给它：</p>
+<pre><code>&gt;&gt;&gt; Company.employees = ReferenceSet(Company.id, Employee.company_id)</code></pre>
+<p>仅次而已，我们已经可以查看哪些员工在给定的公司工作。</p>
+<pre><code>&gt;&gt;&gt; sweets.employees.count()
+1
+
+&gt;&gt;&gt; for employee in sweets.employees:
+...     print &quot;%r, %r&quot; % (employee.id, employee.name)
+...     print employee is ben
+...
+1, u&#x27;Ben Bill&#x27;
+True</code></pre>
+<p>让我们创建另一名雇员，并将他加入到公司当中：</p>
+<pre><code>&gt;&gt;&gt; mike = store.add(Employee(u&quot;Mike Mayer&quot;))
+&gt;&gt;&gt; sweets.employees.add(mike)</code></pre>
+<p>毋庸置疑，Mike 现在已经是公司的职员了，这一情况也应该被反映在其他地方。</p>
+<pre><code>&gt;&gt;&gt; mike.company_id
+2
+
+&gt;&gt;&gt; mike.company is sweets
+True</code></pre>
+<h2>多对多引用集合以及组合键(composed keys)</h2>
+<p>我们还打算在模型中表示会计师。公司都有会计师，但会计师通常可以为多间公司服务，因此我们用多对多关系来表示它们。</p>
+<p>让我们创建简单的类，用来表示会计师及其关系。</p>
+<pre><code>&gt;&gt;&gt; class Accountant(Person):
+...     __storm_table__ = &quot;accountant&quot;
+...     def __init__(self, name):
+...         self.name = name
+
+&gt;&gt;&gt; class CompanyAccountant(object):
+...     __storm_table__ = &quot;company_accountant&quot;
+...     __storm_primary__ = &quot;company_id&quot;, &quot;accountant_id&quot;
+...     company_id = Int()
+...     accountant_id = Int()</code></pre>
+<p>嘿，我们刚刚定义了带组合键的类！</p>
+<p>现在，让我们使用它在 <code>Company</code> 类中定义多对多关系。再一次，我们将新属性塞进已有的对象当中。在编写类的时候定义这些属性也很简单。稍候我们会看到如何用别的方法做这事。</p>
+<pre><code>&gt;&gt;&gt; Company.accountants = ReferenceSet(Company.id,
+...                                    CompanyAccountant.company_id,
+...                                    CompanyAccountant.accountant_id,
+...                                    Accountant.id)</code></pre>
+<p>搞定！属性排列的先后顺序事关重大，但这里面的逻辑应该是一目了然的。</p>
+<p>在这个点上，我们还缺一些表。</p>
+<pre><code>&gt;&gt;&gt; store.execute(&quot;CREATE TABLE accountant &quot;
+...               &quot;(id INTEGER PRIMARY KEY, name VARCHAR)&quot;, noresult=True)
+...
+
+&gt;&gt;&gt; store.execute(&quot;CREATE TABLE company_accountant &quot;
+...               &quot;(company_id INTEGER, accountant_id INTEGER,&quot;
+...               &quot; PRIMARY KEY (company_id, accountant_id))&quot;, noresult=True)</code></pre>
+<p>我们将一对会计夫妇登记到两个公司。</p>
+<pre><code>&gt;&gt;&gt; karl = Accountant(u&quot;Karl Kent&quot;)
+&gt;&gt;&gt; frank = Accountant(u&quot;Frank Fourt&quot;)
+
+&gt;&gt;&gt; sweets.accountants.add(karl)
+&gt;&gt;&gt; sweets.accountants.add(frank)
+
+&gt;&gt;&gt; circus.accountants.add(frank)
+&gt;&gt;&gt;</code></pre>
+<p>大功告成！真的！请注意，我们甚至不必将它们添加到仓库，当它们链接到其他已经在仓库内的对象时，这已经被隐式地执行了，我们也无须宣告对象间的关系，因为那已经在引用对象集合中明晰了。</p>
+<p>现在，让我们来验证一下。</p>
+<pre><code>&gt;&gt;&gt; sweets.accountants.count()
+2
+
+&gt;&gt;&gt; circus.accountants.count()
+1</code></pre>
+<p>我们还没有显式地使用过 <code>CompanyAccountant</code> 对象，假如你好奇的话，也可以验证一下它。</p>
+<pre><code>&gt;&gt;&gt; store.get(CompanyAccountant, (sweets.id, frank.id))
+&lt;CompanyAccountant object at 0x...&gt;&gt; </code></pre>
+<p>请注意，因为组合键的关系，我们往 <code>get</code> 方法传递了一个元组(tuple)。</p>
+<p>如果我们想知道会计师为哪些公司工作， 我们可以很容易地定义一个反向(reversed)关系：</p>
+<pre><code>&gt;&gt;&gt; Accountant.companies = ReferenceSet(Accountant.id,
+...                                     CompanyAccountant.accountant_id,
+...                                     CompanyAccountant.company_id,
+...                                     Company.id)
+
+&gt;&gt;&gt; [company.name for company in frank.companies]
+[u&#x27;Circus Inc.&#x27;, u&#x27;Sweets Inc.&#x27;]
+
+&gt;&gt;&gt; [company.name for company in karl.companies]
+[u&#x27;Sweets Inc.&#x27;]</code></pre>
+<h2>联接(Joins)</h2>
+<p>既然已经有了一些不错的数据，让我们尝试做一些有趣的查询(queries)玩玩看。</p>
+<p>先来检查看看哪些公司至少有一名叫 Ben 的员工。我们至少有两种方法可以做到这一点。</p>
+<p>首先，使用隐式联接。</p>
+<pre><code>&gt;&gt;&gt; result = store.find(Company,
+...                     Employee.company_id == Company.id,
+...                     Employee.name.like(u&quot;Ben %&quot;))
+...
+
+&gt;&gt;&gt; [company.name for company in result]
+[u&#x27;Sweets Inc.&#x27;]</code></pre>
+<p>然后，我们也可以做一个显式联接。这是 Storm 查询当中，映射复杂 SQL 联接的有趣之处。</p>
+<pre><code>&gt;&gt;&gt; origin = [Company, Join(Employee, Employee.company_id == Company.id)]
+&gt;&gt;&gt; result = store.using(*origin).find(Company, Employee.name.like(u&quot;Ben %&quot;))
+
+&gt;&gt;&gt; [company.name for company in result]
+[u&#x27;Sweets Inc.&#x27;]</code></pre>
+<p>如果我们已经定义过公司，并且想知道公司内哪个员工名叫 Ben ，这再容易不过了。</p>
+<pre><code>&gt;&gt;&gt; result = sweets.employees.find(Employee.name.like(u&quot;Ben %&quot;))
+
+&gt;&gt;&gt; [employee.name for employee in result]
+[u&#x27;Ben Bill&#x27;]</code></pre>
+<h2>子查询</h2>
+<p>假设我们想找出所有不属于公司的会计，可以使用子查询。</p>
+<pre><code>&gt;&gt;&gt; laura = Accountant(u&quot;Laura Montgomery&quot;)
+&gt;&gt;&gt; store.add(laura)
+&lt;Accountant ...&gt;
+
+&gt;&gt;&gt; subselect = Select(CompanyAccountant.accountant_id, distinct=True)
+&gt;&gt;&gt; result = store.find(Accountant, Not(Accountant.id.is_in(subselect)))
+&gt;&gt;&gt; result.one() is laura
+True</code></pre>
+<h2>排序以及限制(limiting)结果</h2>
+<p>排序和限制结果通常是这样那样工具的最简单而又最迫切的功能，所以我们希望它们能够既简单又易用，这是当然的了。</p>
+<p>一行代码胜过千言万语，这里有几个例子，说明它是如何工作的：</p>
+<pre><code>&gt;&gt;&gt; garry = store.add(Employee(u&quot;Garry Glare&quot;))
+
+&gt;&gt;&gt; result = store.find(Employee)
+
+&gt;&gt;&gt; [employee.name for employee in result.order_by(Employee.name)]
+[u&#x27;Ben Bill&#x27;, u&#x27;Garry Glare&#x27;, u&#x27;Mike Mayer&#x27;]
+
+&gt;&gt;&gt; [employee.name for employee in result.order_by(Desc(Employee.name))]
+[u&#x27;Mike Mayer&#x27;, u&#x27;Garry Glare&#x27;, u&#x27;Ben Bill&#x27;]
+
+&gt;&gt;&gt; [employee.name for employee in result.order_by(Employee.name)[:2]]
+[u&#x27;Ben Bill&#x27;, u&#x27;Garry Glare&#x27;]</code></pre>
+<h2>多类型查询</h2>
+<p>有时候，用一个查询检索多于一个对象也是蛮有趣的。想象一下，例如除了想知道哪个公司有名叫 Ben 的员工外，我们也想知道这名员工到底是何许人也。这可以用类似如下的查询来完成：</p>
+<pre><code>&gt;&gt;&gt; result = store.find((Company, Employee),
+...                     Employee.company_id == Company.id,
+...                     Employee.name.like(u&quot;Ben %&quot;))
+
+&gt;&gt;&gt; [(company.name, employee.name) for company, employee in result]
+[(u&#x27;Sweets Inc.&#x27;, u&#x27;Ben Bill&#x27;)]</code></pre>
+<h2>Storm 基类</h2>
+<p>到目前为止，我们已经用类和类的属性定义好了引用关系及引用集合。这一做法有一定优势，比如更易于调试，但也有一定缺点，比如因为类需要在本地范围(local scope)内被表示(be present)，可能会导致循环引用(circular import)情况。</p>
+<p>为了避免那样的状况，Storm 支持使用字符串化的方式，为类和属性名字(names)定义引用关系。这样做的唯一不便是，所有相关的类都必须继承 Storm 类。</p>
+<p>让我们定义一些新的类来演示一下。为了揭示要点，我们将在类实际定义引用关系之前引用它们。</p>
+<pre><code>&gt;&gt;&gt; class Country(Storm):
+...     __storm_table__ = &quot;country&quot;
+...     id = Int(primary=True)
+...     name = Unicode()
+...     currency_id = Int()
+...     currency = Reference(currency_id, &quot;Currency.id&quot;)
+
+&gt;&gt;&gt; class Currency(Storm):
+...     __storm_table__ = &quot;currency&quot;
+...     id = Int(primary=True)
+...     symbol = Unicode()
+
+&gt;&gt;&gt; store.execute(&quot;CREATE TABLE country &quot;
+...               &quot;(id INTEGER PRIMARY KEY, name VARCHAR, currency_id INTEGER)&quot;,
+...               noresult=True)
+
+&gt;&gt;&gt; store.execute(&quot;CREATE TABLE currency &quot;
+...               &quot;(id INTEGER PRIMARY KEY, symbol VARCHAR)&quot;, noresult=True)</code></pre>
+<p>现在，让我们看看它是否工作：</p>
+<pre><code>&gt;&gt;&gt; real = store.add(Currency())
+&gt;&gt;&gt; real.id = 1
+&gt;&gt;&gt; real.symbol = u&quot;BRL&quot;
+
+&gt;&gt;&gt; brazil = store.add(Country())
+&gt;&gt;&gt; brazil.name = u&quot;Brazil&quot;
+&gt;&gt;&gt; brazil.currency_id = 1
+
+&gt;&gt;&gt; brazil.currency.symbol
+u&#x27;BRL&#x27;</code></pre>
+<h2>载入钩子</h2>
+<p>Storm 允许类定义几个不同的钩子，当某些事情发生时，它们就会采取行动。这里就有一个有趣的钩子： <code>__storm_loaded__</code> 。</p>
+<p>让我们定义 <code>Person</code> 的一个临时的子类，然后来测试一下它。</p>
+<pre><code>&gt;&gt;&gt; class PersonWithHook(Person):
+...     def __init__(self, name):
+...         print &quot;Creating %s&quot; % name
+...         self.name = name
+...
+...     def __storm_loaded__(self):
+...         print &quot;Loaded %s&quot; % self.name
+
+&gt;&gt;&gt; earl = store.add(PersonWithHook(u&quot;Earl Easton&quot;))
+Creating Earl Easton
+
+&gt;&gt;&gt; earl = store.find(PersonWithHook, name=u&quot;Earl Easton&quot;).one()
+
+&gt;&gt;&gt; store.invalidate(earl)
+&gt;&gt;&gt; del earl
+&gt;&gt;&gt; import gc
+&gt;&gt;&gt; collected = gc.collect()
+
+&gt;&gt;&gt; earl = store.find(PersonWithHook, name=u&quot;Earl Easton&quot;).one()
+Loaded Earl Easton</code></pre>
+<p>请注意，在第一次查找(find)的时候，没有返回结果，因为当时对象还只存在于内存和缓存中。然后，我们从 Storm 缓存中无效化(invalidated)对象，并触发垃圾回收以确保对象不在内存当中。在此之后，对象必须通过数据库被再次检索，钩子(不是构造函数！)也因此被调用。</p>
+<h2>执行表达式</h2>
+<p>Storm 还提供了一种非数据库式(database-agnostic way)的方式来执行表达式，以备不时之需。 例如：</p>
+<pre><code>&gt;&gt;&gt; result = store.execute(Select(Person.name, Person.id == 1))
+&gt;&gt;&gt; result.get_one()
+3 (u&#x27;Joe Johnes&#x27;,)</code></pre>
+<p>这一机制被 Storm 自身内部用以实现更高级功能。</p>
+<h2>自动重载(reloading)值</h2>
+<p>Storm 提供了一些在它控制之下的特殊值，可以将它们赋给属性。其中一个特殊值就是 <code>AutoReload</code> 。启用它后，每次接触(touched)数据库，对象的值都将被自动重载。这对主键可能有用，就如下面的例子所示。</p>
+<pre><code>&gt;&gt;&gt; from storm.locals import AutoReload
+
+&gt;&gt;&gt; ruy = store.add(Person())
+&gt;&gt;&gt; ruy.name = u&quot;Ruy&quot;
+&gt;&gt;&gt; print ruy.id
+None
+
+&gt;&gt;&gt; ruy.id = AutoReload
+&gt;&gt;&gt; print ruy.id
+4</code></pre>
+<p>当有需要时，可以将属性的默认值设为 <code>AutoReload</code> ，让对象实行自动刷新。</p>
+<h2>表达式的值</h2>
+<p>可以赋给属性的除了自动重载之外，还有“惰性表达式”。这种表达式只在属性被访问、或者当对象被刷新到数据库(插入/更新)时，才会被刷新到数据库。</p>
+<p>例如：</p>
+<pre><code>from storm.locals import SQL
+
+&gt;&gt;&gt; ruy.name = SQL(&quot;(SELECT name || ? FROM person WHERE id=4)&quot;, (&quot; Ritcher&quot;,))
+&gt;&gt;&gt; ruy.name
+u&#x27;Ruy Ritcher&#x27;</code></pre>
+<p>请注意，这只是一个关于“可以做什么”的例子，并不是说非要这样写 SQL 语句不可。你可以用 Storm 提供的基于类的 SQL 表达式，把惰性表达式忘到九霄云外。</p>
+<h2>别名(aliase)</h2>
+<p>现在，我们想要找出所有在同一家公司工作的人——我不知道到底是谁想这么干，但这是一个使用别名的好机会。</p>
+<p>首先，我们要将 <code>ClassAlias</code> 引入到本地命名空间当中(友情提示： <code>storm.local</code> 也应该被载入)，并且创建一个引用指向它。</p>
+<pre><code>&gt;&gt;&gt; from storm.info import ClassAlias
+&gt;&gt;&gt; AnotherEmployee = ClassAlias(Employee)</code></pre>
+<p>它看上去不错，不是嘛？</p>
+<p>现在，我们可以用一种简单直接的方式来查询：</p>
+<pre><code>&gt;&gt;&gt; result = store.find((Employee, AnotherEmployee),
+...                     Employee.company_id == AnotherEmployee.company_id,
+...                     Employee.id &gt; AnotherEmployee.id)
+
+&gt;&gt;&gt; for employee1, employee2 in result:
+...     print (employee1.name, employee2.name)
+(u&#x27;Mike Mayer&#x27;, u&#x27;Ben Bill&#x27;)</code></pre>
+<p>哇！ Mike 和 Ben 为同一家公司工作！</p>
+<p>(考考你：为什么上面的查询里要使用大于号？)</p>
+<h2>调试</h2>
+<p>某些时候，你需查看 Storm 正在执行的语句。一个建立在 Storm 跟踪系统之上的调试跟踪器可以用来查看引擎盖下到底发生了什么事。跟踪器是一个对象，当有趣的事情发生——比如当 Storm 执行一个语句时，它会收到通知。提供了一个函数来开启和关闭语句跟踪语句。语句默认记录在 <code>sys.stderr</code> 之下，也可以自己指定一个流。</p>
+<pre><code>&gt;&gt;&gt; import sys
+&gt;&gt;&gt; from storm.tracer import debug
+
+&gt;&gt;&gt; debug(True, stream=sys.stdout)
+&gt;&gt;&gt; result = store.find((Employee, AnotherEmployee),
+...                     Employee.company_id == AnotherEmployee.company_id,
+...                     Employee.id &gt; AnotherEmployee.id)
+&gt;&gt;&gt; list(result)
+EXECUTE: &#x27;SELECT employee.company_id, employee.id, employee.name, &quot;...&quot;.company_id, &quot;...&quot;.id, &quot;...&quot;.name FROM employee, employee AS &quot;...&quot; WHERE employee.company_id = &quot;...&quot;.company_id AND employee.id &gt; &quot;...&quot;.id&#x27;, ()
+[(&lt;Employee object at ...&gt;, &lt;Employee object at ...&gt;)]
+
+&gt;&gt;&gt; debug(False)
+&gt;&gt;&gt; list(result)
+[(&lt;Employee object at ...&gt;, &lt;Employee object at ...&gt;)]</code></pre>
+<h2>更多！</h2>
+<p>关于 Storm 还有很多值得谈谈。这个教程只提供了一些入门概念。如果你的问题在别的地方找不到答案，欢迎你到邮件列表里发问。</p>
+          </div>
+          <p class="colophon">写于 2015.06.13，按当时的记录保留。</p>
+          <p class="back"><a href="/writing/">返回写作</a></p>
+        </article>
+
+      </main>
+      <footer class="site-footer">
+        <p>© 2015–2026 黄曦然</p>
+        <p><a href="mailto:huang@come2art.com">huang@come2art.com</a></p>
+      </footer>
+    </div>
+  </div>
+</body>
+</html>

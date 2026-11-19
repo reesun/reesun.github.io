@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>linux查看进程信息 /proc/:pid/status · 梦开始的地方</title>
+  <meta name="description" content="用 /proc/&amp;lt;pid&amp;gt;/status 看进程状态、内存和信号。">
+  <link rel="canonical" href="https://www.reesun.xyz/writing/2015-05-13-proc-status.html">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="alternate" type="application/rss+xml" title="梦开始的地方" href="/rss.xml">
+  <meta property="og:title" content="linux查看进程信息 /proc/:pid/status · 梦开始的地方">
+  <meta property="og:description" content="用 /proc/&amp;lt;pid&amp;gt;/status 看进程状态、内存和信号。">
+  <meta property="og:url" content="https://www.reesun.xyz/writing/2015-05-13-proc-status.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="梦开始的地方">
+  <meta name="theme-color" content="#f3efe6">
+  <link rel="stylesheet" href="/css/site.css">
+</head>
+<body>
+  <div class="frame">
+    <aside class="spine">
+      <a href="/">黄曦然</a>
+      <span>北京</span>
+    </aside>
+    <div class="sheet">
+      <nav class="nav">
+        <a href="/">首页</a>
+        <a href="/writing/" aria-current="page">写作</a>
+        <a href="https://github.com/reesun">GitHub</a>
+      </nav>
+      <main>
+        <article>
+          <p class="kicker"><a href="/writing/">写作</a> · 技术 · <time datetime="2015-05-13">2015.05.13</time></p>
+          <h1>linux查看进程信息 /proc/:pid/status</h1>
+          <div class="prose">
+<p>linux中可以通过<code>/proc/&lt;pid&gt;/staus</code>查看进程的相关信息。包括内存使用等情况</p>
+<pre><code>$ cat /proc/9744/status</code></pre>
+<ul>
+<li>Name: gedit /<em>进程的程序名</em>/</li>
+<li>State: S (sleeping) /<em>进程的状态信息</em>/</li>
+<li>Tgid: 9744 /<em>线程组号</em>/</li>
+<li>Pid: 9744 /<em>进程pid</em>/</li>
+<li>PPid: 7672 /<em>父进程的pid</em>/</li>
+<li>TracerPid: 0 /<em>跟踪进程的pid</em>/</li>
+<li>Uid: 1000    1000    1000    1000 /<em>uid euid suid fsuid</em>/</li>
+<li>Gid: 1000    1000    1000    1000 /<em>gid egid sgid fsgid</em>/</li>
+<li>FDSize: 256 /<em>文件描述符的最大个数，file-&gt;fds</em>/</li>
+<li>Groups: 0 4 20 24 25 29 30 44 46 107 109 115 124 1000 /<em>启动该进程的用户所属的组的id</em>/</li>
+<li>VmPeak: 60184 kB /<em>进程地址空间的大小</em>/</li>
+<li>VmSize: 60180 kB /<em>进程虚拟地址空间的大小reserved_vm：进程在预留或特殊的内存间的物理页</em>/</li>
+<li>VmLck: 0 kB /<em>进程已经锁住的物理内存的大小.锁住的物理内存不能交换到硬盘</em>/</li>
+<li>VmHWM: 18020 kB /<em>文件内存映射和匿名内存映射的大小</em>/</li>
+<li>VmRSS: 18020 kB /<em>应用程序正在使用的物理内存的大小，就是用ps命令的参数rss的值 (rss)</em>/</li>
+<li>VmData: 12240 kB /<em>程序数据段的大小（所占虚拟内存的大小），存放初始化了的数据</em>/</li>
+<li>VmStk: 84 kB /<em>进程在用户态的栈的大小</em>/</li>
+<li>VmExe: 576 kB /*程序所拥有的可执行虚拟内存的大小,代码段,不包括任务使用的库 */</li>
+<li>VmLib: 21072 kB /<em>被映像到任务的虚拟内存空间的库的大小</em>/</li>
+<li>VmPTE: 56 kB /<em>该进程的所有页表的大小</em>/</li>
+<li>Threads: 1 /<em>共享使用该信号描述符的任务的个数</em>/</li>
+<li>SigQ: 0/8183 /<em>待处理信号的个数/目前最大可以处理的信号的个数</em>/</li>
+<li>SigPnd: 0000000000000000 /<em>屏蔽位，存储了该线程的待处理信号</em>/</li>
+<li>ShdPnd: 0000000000000000 /<em>屏蔽位，存储了该线程组的待处理信号</em>/</li>
+<li>SigBlk: 0000000000000000 /<em>存放被阻塞的信号</em>/</li>
+<li>SigIgn: 0000000000001000 /<em>存放被忽略的信号</em>/</li>
+<li>SigCgt: 0000000180000000 /<em>存放被俘获到的信号</em>/</li>
+<li>CapInh: 0000000000000000 /<em>能被当前进程执行的程序的继承的能力</em>/</li>
+<li>CapPrm: 0000000000000000 /<em>进程能够使用的能力，可以包含CapEff中没有的能力，这些能力是被进程自己临时放弃的</em>/</li>
+<li>CapEff: 0000000000000000 /<em>是CapPrm的一个子集，进程放弃没有必要的能力有利于提高安全性</em>/</li>
+<li>Cpus_allowed: 01 /<em>可以执行该进程的CPU掩码集</em>/</li>
+<li>Mems_allowed: 1 /**/</li>
+<li>voluntary_ctxt_switches: 1241 /<em>进程主动切换的次数</em>/</li>
+<li>nonvoluntary_ctxt_switches: 717 /<em>进程被动切换的次数</em>/</li>
+</ul>
+
+          </div>
+          <p class="colophon">写于 2015.05.13，按当时的记录保留。</p>
+          <p class="back"><a href="/writing/">返回写作</a></p>
+        </article>
+
+      </main>
+      <footer class="site-footer">
+        <p>© 2015–2026 黄曦然</p>
+        <p><a href="mailto:huang@come2art.com">huang@come2art.com</a></p>
+      </footer>
+    </div>
+  </div>
+</body>
+</html>
