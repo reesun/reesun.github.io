@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <rect width="32" height="32" rx="8" fill="#0e3036"/>
-  <circle cx="23" cy="9" r="3" fill="#f6edd6"/>
-  <text x="16" y="23" text-anchor="middle" font-size="14" font-family="serif" fill="#f4efe4">梦</text>
+  <rect width="32" height="32" fill="#ffffff"/>
+  <rect width="32" height="4" fill="#9f2d20"/>
+  <text x="16" y="24" text-anchor="middle" font-size="14" font-family="serif" fill="#161616">梦</text>
 </svg>
