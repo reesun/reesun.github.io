@@ -13,33 +13,53 @@
   <meta property="og:url" content="https://www.reesun.xyz/404.html">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="梦开始的地方">
-  <meta name="theme-color" content="#f3efe6">
-  <link rel="stylesheet" href="/css/site.css">
+  <meta name="theme-color" content="#07141a">
+  <link rel="stylesheet" href="/css/site.css?v=2">
 </head>
 <body>
-  <div class="frame">
-    <aside class="spine">
-      <a href="/">黄曦然</a>
-      <span>北京</span>
-    </aside>
-    <div class="sheet">
-      <nav class="nav">
+<header class="post-hero">
+  <svg class="hero-art" viewBox="0 0 1440 720" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0.2" y2="1">
+      <stop offset="0" stop-color="#07141a"/>
+      <stop offset="0.48" stop-color="#123840"/>
+      <stop offset="1" stop-color="#1d6a72"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="62%" cy="38%" r="26%">
+      <stop offset="0" stop-color="#f6edd6" stop-opacity="0.95"/>
+      <stop offset="0.35" stop-color="#f6edd6" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#f6edd6" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1440" height="720" fill="url(#sky)"/>
+  <rect width="1440" height="720" fill="url(#glow)"/>
+  <circle cx="860" cy="250" r="34" fill="#f7f1df"/>
+  <path d="M0 470 C 240 410, 420 530, 700 470 C 980 410, 1160 540, 1440 460 L1440 720 L0 720 Z" fill="#0c2a30" opacity="0.55"/>
+  <path d="M0 560 C 280 500, 560 610, 900 540 C 1120 500, 1280 590, 1440 540 L1440 720 L0 720 Z" fill="#08181c"/>
+</svg>
+  <div class="hero-inner">
+    <div class="topbar">
+      <a class="brand" href="/">黄曦然</a>
+      <nav class="menu">
         <a href="/">首页</a>
         <a href="/writing/">写作</a>
         <a href="https://github.com/reesun">GitHub</a>
       </nav>
-      <main>
-        <p class="kicker">404</p>
-        <h1>这一页不在</h1>
-        <p>地址可能写错了，或者这篇笔记没有留在这里。</p>
-        <p class="back"><a href="/">回到首页</a></p>
-
-      </main>
-      <footer class="site-footer">
-        <p>© 2015–2026 黄曦然</p>
-        <p><a href="mailto:huang@come2art.com">huang@come2art.com</a></p>
-      </footer>
     </div>
   </div>
+</header>
+<div class="post-wrap">
+  <article class="sheet">
+    <p class="kicker">404</p>
+    <h1>这一页不在</h1>
+    <p>地址可能写错了，或者这篇笔记没有留在这里。</p>
+    <p class="back"><a href="/">回到首页</a></p>
+  </article>
+</div>
+<footer class="site-footer">
+    <span>© 2015–2026 黄曦然</span>
+    <a href="mailto:huang@come2art.com">huang@come2art.com</a>
+  </footer>
+
 </body>
 </html>

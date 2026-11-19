@@ -13,94 +13,142 @@
   <meta property="og:url" content="https://www.reesun.xyz/">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="梦开始的地方">
-  <meta name="theme-color" content="#f3efe6">
-  <link rel="stylesheet" href="/css/site.css">
+  <meta name="theme-color" content="#07141a">
+  <link rel="stylesheet" href="/css/site.css?v=2">
 </head>
 <body>
-  <div class="frame">
-    <aside class="spine">
-      <a href="/">黄曦然</a>
-      <span>北京</span>
-    </aside>
-    <div class="sheet">
-      <nav class="nav">
+<header class="hero">
+  <svg class="hero-art" viewBox="0 0 1440 720" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0.2" y2="1">
+      <stop offset="0" stop-color="#07141a"/>
+      <stop offset="0.48" stop-color="#123840"/>
+      <stop offset="1" stop-color="#1d6a72"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="62%" cy="38%" r="26%">
+      <stop offset="0" stop-color="#f6edd6" stop-opacity="0.95"/>
+      <stop offset="0.35" stop-color="#f6edd6" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#f6edd6" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1440" height="720" fill="url(#sky)"/>
+  <rect width="1440" height="720" fill="url(#glow)"/>
+  <circle cx="860" cy="250" r="34" fill="#f7f1df"/>
+  <path d="M0 470 C 240 410, 420 530, 700 470 C 980 410, 1160 540, 1440 460 L1440 720 L0 720 Z" fill="#0c2a30" opacity="0.55"/>
+  <path d="M0 560 C 280 500, 560 610, 900 540 C 1120 500, 1280 590, 1440 540 L1440 720 L0 720 Z" fill="#08181c"/>
+</svg>
+  <div class="hero-inner">
+    <div class="topbar">
+      <a class="brand" href="/">黄曦然</a>
+      <nav class="menu">
         <a href="/" aria-current="page">首页</a>
         <a href="/writing/">写作</a>
         <a href="https://github.com/reesun">GitHub</a>
       </nav>
-      <main>
-        <p class="kicker">笔记 · 2015–2016</p>
-        <h1>梦开始的地方</h1>
-        <div class="lede">
-          <p>大学时写过小内核，有些零散的记录。曾做过数据分析与推荐系统的相关工作，目前在一家互联网公司，负责技术架构。</p>
-          <p>要学习的还有很多，技术是一方面，另一方面是行业知识。下面这些笔记写于 2015 到 2016 年，按原样留着。</p>
-        </div>
-        <h2 class="section-title">笔记</h2>
-        <ol class="entries">
-        <li>
-          <a class="entry" href="/writing/2016-03-16-act.html">
-            <time datetime="2016-03-16">2016.03.16</time>
-            <span class="cat">管理</span>
-            <span class="name">积极行动，解决问题</span>
-          </a>
-        </li>
-        <li>
-          <a class="entry" href="/writing/2015-06-13-storm.html">
-            <time datetime="2015-06-13">2015.06.13</time>
-            <span class="cat">技术</span>
-            <span class="name">Storm Tutorial 中文版</span>
-          </a>
-        </li>
-        <li>
-          <a class="entry" href="/writing/2015-05-13-proc-status.html">
-            <time datetime="2015-05-13">2015.05.13</time>
-            <span class="cat">技术</span>
-            <span class="name">linux查看进程信息 /proc/:pid/status</span>
-          </a>
-        </li>
-        <li>
-          <a class="entry" href="/writing/2015-05-06-redis.html">
-            <time datetime="2015-05-06">2015.05.06</time>
-            <span class="cat">技术</span>
-            <span class="name">Redis配置说明</span>
-          </a>
-        </li>
-        <li>
-          <a class="entry" href="/writing/2015-05-04-gradle.html">
-            <time datetime="2015-05-04">2015.05.04</time>
-            <span class="cat">技术</span>
-            <span class="name">Gradle基本使用</span>
-          </a>
-        </li>
-        <li>
-          <a class="entry" href="/writing/2015-04-09-power-of-now.html">
-            <time datetime="2015-04-09">2015.04.09</time>
-            <span class="cat">读书</span>
-            <span class="name">读《当下的力量》</span>
-          </a>
-        </li>
-        <li>
-          <a class="entry" href="/writing/2015-04-09-solitude.html">
-            <time datetime="2015-04-09">2015.04.09</time>
-            <span class="cat">随笔</span>
-            <span class="name">男人，应该学会孤独</span>
-          </a>
-        </li>
-        </ol>
-        <h2 class="section-title">关于</h2>
-        <div class="about">
-          <p>个人拙见：互联网本质是，把信息放到网上，以适当形式组织起来并展现，方便需要的人士获取。</p>
-          <p>小人物的特点：永远努力学习，永不放弃，每天进步一点点也会很开心，因为比昨天的我更进步了。喜欢在温暖的阳台上看书，从上午看到日落。历史、哲学、传记都读。平时会看 Linux 内核、高并发和高性能架构，以及搜索。</p>
-          <blockquote><p>The better you understand what you are doing, the better you will do it.</p></blockquote>
-          <p class="contact"><a href="https://github.com/reesun">GitHub</a> · <a href="mailto:huang@come2art.com">邮件</a></p>
-        </div>
-
-      </main>
-      <footer class="site-footer">
-        <p>© 2015–2026 黄曦然</p>
-        <p><a href="mailto:huang@come2art.com">huang@come2art.com</a></p>
-      </footer>
+    </div>
+    <div class="hero-copy">
+      <p class="eyebrow">北京 · 技术架构</p>
+      <h1>梦开始的地方</h1>
+      <p class="deck">大学时写过小内核，有些零散的记录。曾做过数据分析与推荐，目前在一家互联网公司负责技术架构。这里留着 2015 到 2016 年写下的笔记。</p>
+      <div class="actions">
+        <a class="btn" href="/writing/">全部笔记</a>
+        <a class="btn ghost" href="https://github.com/reesun">GitHub</a>
+      </div>
     </div>
   </div>
+</header>
+<div class="layout">
+  <div class="stack">
+    <a class="feature" href="/writing/2015-04-09-solitude.html">
+      <div class="cover" data-cat="随笔"><span>随</span></div>
+      <div class="feature-body">
+        <p class="meta">2015.04.09 · <b>随笔</b></p>
+        <h2>男人，应该学会孤独</h2>
+        <p class="excerpt">孤独是一种方式，也是一种境界。</p>
+        <span class="more">阅读这篇</span>
+      </div>
+    </a>
+    <a class="card" href="/writing/2016-03-16-act.html">
+      <div class="cover" data-cat="管理"><span>管</span></div>
+      <div class="card-body">
+        <p class="meta">2016.03.16 · <b>管理</b></p>
+        <h2>积极行动，解决问题</h2>
+        <p class="excerpt">努力解决问题。</p>
+        
+      </div>
+    </a>
+<a class="card" href="/writing/2015-06-13-storm.html">
+      <div class="cover" data-cat="技术"><span>技</span></div>
+      <div class="card-body">
+        <p class="meta">2015.06.13 · <b>技术</b></p>
+        <h2>Storm Tutorial 中文版</h2>
+        <p class="excerpt">Storm 官方教程的简体中文译本，从建表、查询到引用关系。</p>
+        
+      </div>
+    </a>
+<a class="card" href="/writing/2015-05-13-proc-status.html">
+      <div class="cover" data-cat="技术"><span>技</span></div>
+      <div class="card-body">
+        <p class="meta">2015.05.13 · <b>技术</b></p>
+        <h2>linux查看进程信息 /proc/:pid/status</h2>
+        <p class="excerpt">用 /proc/&lt;pid&gt;/status 看进程状态、内存和信号。</p>
+        
+      </div>
+    </a>
+<a class="card" href="/writing/2015-05-06-redis.html">
+      <div class="cover" data-cat="技术"><span>技</span></div>
+      <div class="card-body">
+        <p class="meta">2015.05.06 · <b>技术</b></p>
+        <h2>Redis配置说明</h2>
+        <p class="excerpt">Redis 配置项说明：守护进程、持久化、主从和连接限制。</p>
+        
+      </div>
+    </a>
+<a class="card" href="/writing/2015-05-04-gradle.html">
+      <div class="cover" data-cat="技术"><span>技</span></div>
+      <div class="card-body">
+        <p class="meta">2015.05.04 · <b>技术</b></p>
+        <h2>Gradle基本使用</h2>
+        <p class="excerpt">从 Maven 换到 Gradle 时补的一份使用笔记。</p>
+        
+      </div>
+    </a>
+<a class="card" href="/writing/2015-04-09-power-of-now.html">
+      <div class="cover" data-cat="读书"><span>读</span></div>
+      <div class="card-body">
+        <p class="meta">2015.04.09 · <b>读书</b></p>
+        <h2>读《当下的力量》</h2>
+        <p class="excerpt">胡思乱想的时候，当前这一分钟就被放掉了。</p>
+        
+      </div>
+    </a>
+  </div>
+  <aside class="side">
+      <section class="profile">
+        <div class="avatar" aria-hidden="true">曦</div>
+        <h2>黄曦然</h2>
+        <p>北京。做过数据分析与推荐，目前负责技术架构。喜欢在阳台上看书，历史、哲学、传记都读。</p>
+        <blockquote>The better you understand what you are doing, the better you will do it.</blockquote>
+        <div class="chips">
+          <a href="https://github.com/reesun">GitHub</a>
+          <a href="mailto:huang@come2art.com">邮件</a>
+        </div>
+      </section>
+      <section class="panel">
+        <h3>分类</h3>
+        <ul>
+          <li><a href="/writing/#cat-管理">管理</a><span>1</span></li>
+<li><a href="/writing/#cat-技术">技术</a><span>4</span></li>
+<li><a href="/writing/#cat-读书">读书</a><span>1</span></li>
+<li><a href="/writing/#cat-随笔">随笔</a><span>1</span></li>
+        </ul>
+      </section>
+    </aside>
+</div>
+<footer class="site-footer">
+    <span>© 2015–2026 黄曦然</span>
+    <a href="mailto:huang@come2art.com">huang@come2art.com</a>
+  </footer>
+
 </body>
 </html>
